@@ -76,6 +76,8 @@ FROM test1
 UNION 
 SELECT *
 FROM test2
+
+-- BONUS co sa stane ked nesedia stlpce ?
 -- pocet stlpcov a datovy typ musia byt tie iste 
 DROP TABLE IF EXISTS test3;
 CREATE TABLE test3 (
