@@ -5,12 +5,13 @@ import traceback
 from psycopg2 import sql
 
 class PostgresHandler:
-    def __init__(self, host, database, user, password):
+    def __init__(self, host, database, user, password, debug=False):
         self.connection=None
         self.host=host
         self.database=database
         self.user=user
         self.password=password
+        self.debug=debug
     
     def connect(self):
         self.connection = psycopg2.connect(
@@ -19,7 +20,8 @@ class PostgresHandler:
             user=self.user,
             password=self.password
         )
-        print("Connected")
+        if self.debug:
+            print("Connected")
 
     def insert_data(self, table_name, data_dict):
         if self.connection == None or self.connection.closed:
@@ -37,7 +39,8 @@ class PostgresHandler:
                     sql.SQL(',').join(map(sql.Identifier, data_dict.keys())),
                     sql.SQL(',').join(map(sql.Literal, data_dict.values()))
                 )
-                print(insert_query.as_string(cur)) # Pre kontrolu
+                if self.debug:
+                    print(insert_query.as_string(cur)) # Pre kontrolu
                 cur.execute(insert_query)
                 inserted=cur.fetchone()
             except Exception as e:
@@ -76,7 +79,8 @@ class PostgresHandler:
                         sql.Identifier(target_column),
                         sql.Literal(target_value)
                     )
-                print(select_query.as_string(cur)) # Pre kontrolu
+                if self.debug:
+                    print(select_query.as_string(cur)) # Pre kontrolu
                 cur.execute(select_query)
                 result=cur.fetchall()
             except Exception as e:
@@ -86,10 +90,6 @@ class PostgresHandler:
         return result
 
     def get_join_results(self, table_name_a, table_name_b, join_coulmn_name_a, join_coulmn_name_b=None):
-        print(table_name_a)
-        print(table_name_b)
-        print(join_coulmn_name_a)
-        print(join_coulmn_name_b)
         result=[]
         join_coulmn_name_b = join_coulmn_name_b or join_coulmn_name_a
         if self.connection == None or self.connection.closed:
@@ -111,7 +111,8 @@ class PostgresHandler:
                     sql.Identifier(table_name_b),
                     sql.Identifier(join_coulmn_name_b),
                 )
-                print(join_query.as_string(cur)) # Pre kontrolu
+                if self.debug:
+                    print(join_query.as_string(cur)) # Pre kontrolu
                 cur.execute(join_query)
                 result=cur.fetchall()
             except Exception as e:

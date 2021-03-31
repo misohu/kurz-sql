@@ -7,9 +7,9 @@ if __name__ == "__main__":
     print("-----TABLES WILL BE CREATED-----")
     conn=psycopg2.connect(
         host=os.getenv("POSTGRES_HOST", "localhost"),
-        database=os.getenv("POSTGRES_DATABASE", "school"),
-        user=os.getenv("POSTGRES_USER", "michal"),
-        password=os.getenv("POSTGRES_PASSWORD", "michal"),
+        database=os.getenv("POSTGRES_DATABASE", "postgres"),
+        user=os.getenv("POSTGRES_USER", "postgres"),
+        password=os.getenv("POSTGRES_PASSWORD", "postgres"),
     )
     print("-----CONNECTED-----")
     with conn, conn.cursor() as cur:

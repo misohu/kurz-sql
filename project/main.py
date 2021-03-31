@@ -5,9 +5,9 @@ from src.utils.postgres_handler import PostgresHandler
 
 pg_handler=PostgresHandler(
     host=os.getenv("POSTGRES_HOST", "localhost"),
-    database=os.getenv("POSTGRES_DATABASE", "school"),
-    user=os.getenv("POSTGRES_USER", "michal"),
-    password=os.getenv("POSTGRES_PASSWORD", "michal"),
+    database=os.getenv("POSTGRES_DATABASE", "postgres"),
+    user=os.getenv("POSTGRES_USER", "postgres"),
+    password=os.getenv("POSTGRES_PASSWORD", "postgres"),
 )
 
 information_system=InformationSystem(db_handler=pg_handler)
@@ -96,10 +96,11 @@ def create_student(information_system: InformationSystem):
         information_system.insert_student_to_course(student['student_id'], course['course_id'])
 
 def get_courses(information_system: InformationSystem):
+    print("Courses List:")
     result_data=information_system.get_courses_detailed()
     for key, value in result_data.items():
         formated_students=", ".join(map(lambda x: student_dict_to_string(x), value['students']))
-        print(f"Subject: {key}\n\tTeacher: {teacher_dict_to_string(value['teacher'])}\tStudents: {formated_students}")
+        print(f"Subject: {key}\n\tTeacher: {teacher_dict_to_string(value['teacher'])}\n\tStudents: {formated_students}")
 
 def teacher_dict_to_string(teacher_dict):
     return f"{teacher_dict['degree']}. {teacher_dict['name']} {teacher_dict['surname']}"

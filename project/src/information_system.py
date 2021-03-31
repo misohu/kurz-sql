@@ -32,11 +32,11 @@ class InformationSystem:
     def get_courses_detailed(self):
         course_list=self.db_handler.get_data_simple_condition(consts.COURSE_TABLE, ["course_id", "name", "teacher_id"])
         course_student_list=self.db_handler.get_join_results(consts.STUDENT_TABLE, consts.COURSE_STUDENT_TABLE, "student_id")
-        
+
         result_dict={}
         for course in course_list: 
             course_teacher=self.db_handler.get_data_simple_condition(consts.TEACHER_TABLE, ['name', 'surname', 'degree'], "teacher_id", str(course['teacher_id']))[0]
-            target_students=filter(lambda course_student: course_student['course_id'] == course['course_id'], course_student_list)
+            target_students=list(filter(lambda course_student: course_student['course_id'] == course['course_id'], course_student_list))
             result_dict[course['name']]={
                 "teacher": course_teacher,
                 "students": target_students
